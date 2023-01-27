@@ -32,24 +32,41 @@ namespace ContactPro.Controllers
 
         // GET: Contacts
         [Authorize]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int catId)
         {
             var contacts = new List<Contact>();
             string appUserId = _userManager.GetUserId(User);
 
 
             //return userID and its associated contacts and associated categories;
-            AppUser appUser = _context.Users
+            AppUser? appUser = _context.Users
                 .Include(c => c.Contacts)
                 .ThenInclude(c => c.Categories)
                 .FirstOrDefault(u => u.Id == appUserId);
 
-            var categories = appUser.Categories;
+            var categories = appUser!.Categories;
 
-            contacts = appUser.Contacts.OrderBy(c => c.LastName)
-                .ThenBy(c => c.FirstName)
-                .ToList();
-            ViewData["CategoryId"] = new SelectList(categories, "Id", "Name");
+            if (appUser != null)
+            {
+                if (catId == 0)
+                {
+                    contacts = appUser.Contacts.OrderBy(c => c.FullName).ToList();
+                }
+                else
+                {
+                    contacts = appUser.Categories.FirstOrDefault(c => c.Id == catId)!
+                        .Contacts
+                        .OrderBy(c => c.FirstName)
+                        .ThenBy(c => c.LastName)
+                        .ToList();
+                }
+            }
+
+
+
+
+
+            ViewData["CategoryId"] = new SelectList(categories, "Id", "Name", catId);
 
             return View(contacts);
         }

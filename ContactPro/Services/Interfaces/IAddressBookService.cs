@@ -6,10 +6,9 @@ namespace ContactPro.Services.Interfaces
     {
         Task AddContactToCategoryAsync(int categoryId, int contactId);
         Task<bool> IsContactInCategory(int categoryId, int contactId);
-
-        Task<IEnumerable<Category>> GetUserCategoriesAsync(string userId);
-        Task<ICollection<int>> GetContactCategory(int contactId);
-        Task<ICollection<Category>> GetContactCategoriesAsync(int contactId);
+        Task<IEnumerable<Category>> GetUserCategoriesAsync(string userId);        
+        Task<ICollection<int>> GetContactCategoryIdsAsync(int contactId);
+        Task<ICollection<Category>> GetContactCategoriesAsync(int contactId);        
         Task RemoveContactFromCategoryAsync(int categoryId, int contactId);
         IEnumerable<Category> SearchForContacts(string seachString, string userId);
     }
