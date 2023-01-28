@@ -33,6 +33,16 @@
                 </select>
             </div>
         </form>
+        <form asp-action="Index" asp-controller="Contacts">
+            <div class="mt-5">
+                <label class="form-label fw-bold">Filter By State</label>
+
+                <select name="state" asp-items="@ViewBag.States" class="form-control"
+                        onchange="this.form.submit()" onfocus="this.selectedIndex=-1;this.blur();">
+                    <option>All Contacts</option>
+                </select>
+            </div>
+        </form>
     </div>
     <div class="col-12 col-md-8">
         <div class="row row-cols-1 g-3">

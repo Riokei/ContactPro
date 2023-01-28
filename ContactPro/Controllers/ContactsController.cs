@@ -32,7 +32,7 @@ namespace ContactPro.Controllers
 
         // GET: Contacts
         [Authorize]
-        public async Task<IActionResult> Index(int catId)
+        public async Task<IActionResult> Index(int catId, string state)
         {
             var contacts = new List<Contact>();
             string appUserId = _userManager.GetUserId(User);
@@ -46,9 +46,20 @@ namespace ContactPro.Controllers
 
             var categories = appUser!.Categories;
 
+            //States drop down filter
+            var contact = from s in _context.Contacts select s;
+            //var stateResult = contact.Select(c => c.State).ToList();
+            var stateResult = from States s in Enum.GetValues(typeof(States)) select new { Id = s.ToString(), Name = s.ToString() };
+
+            //need to finish this.
+            if (!string.IsNullOrEmpty(state))
+            { }
+              
+
+
             if (appUser != null)
             {
-                if (catId == 0)
+                if (catId == 0 )
                 {
                     contacts = appUser.Contacts.OrderBy(c => c.FullName).ToList();
                 }
@@ -65,7 +76,7 @@ namespace ContactPro.Controllers
 
 
 
-
+            ViewData["States"] = new SelectList(stateResult, "Id", "Name",  state);
             ViewData["CategoryId"] = new SelectList(categories, "Id", "Name", catId);
 
             return View(contacts);
