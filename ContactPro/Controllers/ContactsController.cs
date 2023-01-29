@@ -36,8 +36,6 @@ namespace ContactPro.Controllers
         {
             var contacts = new List<Contact>();
             string appUserId = _userManager.GetUserId(User);
-
-
             //return userID and its associated contacts and associated categories;
             AppUser? appUser = _context.Users
                 .Include(c => c.Contacts)
@@ -51,19 +49,15 @@ namespace ContactPro.Controllers
             //var stateResult = contact.Select(c => c.State).ToList();
             var stateResult = from States s in Enum.GetValues(typeof(States)) select new { Id = s.ToString(), Name = s.ToString() };
 
-            //need to finish this.
-            if (!string.IsNullOrEmpty(state))
-            { }
-              
-
-
+            //filters
             if (appUser != null)
             {
-                if (catId == 0 )
+                if (catId == 0 && state == null)
                 {
                     contacts = appUser.Contacts.OrderBy(c => c.FullName).ToList();
                 }
-                else
+                
+                else if (catId != 0)
                 {
                     contacts = appUser.Categories.FirstOrDefault(c => c.Id == catId)!
                         .Contacts
@@ -71,10 +65,16 @@ namespace ContactPro.Controllers
                         .ThenBy(c => c.LastName)
                         .ToList();
                 }
+                //Add in the state filter.
+                else if (state != null)
+                {
+                    contacts = contact.Where(c => c.State == (States)Enum.Parse(typeof(States), state))
+                        .OrderBy(c => c.FirstName)
+                        .ThenBy(c => c.LastName)
+                        .ToList();
+
+                }
             }
-
-
-
 
             ViewData["States"] = new SelectList(stateResult, "Id", "Name",  state);
             ViewData["CategoryId"] = new SelectList(categories, "Id", "Name", catId);
