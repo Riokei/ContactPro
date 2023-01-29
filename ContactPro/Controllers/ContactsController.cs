@@ -52,7 +52,7 @@ namespace ContactPro.Controllers
             //filters
             if (appUser != null)
             {
-                if (catId == 0 && state == null)
+                if (catId == 0 && state == null || state == "All Contacts")
                 {
                     contacts = appUser.Contacts.OrderBy(c => c.FullName).ToList();
                 }
