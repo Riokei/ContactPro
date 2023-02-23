@@ -42,7 +42,7 @@ namespace ContactPro.Services
                 Contact? contact = await _context.Contacts.Include(c => c.Categories).FirstOrDefaultAsync(c => c.Id == contactId);
                 return contact!.Categories;
             }
-            catch
+            catch (Exception)
             {
                 throw;
             }
