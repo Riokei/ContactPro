@@ -137,7 +137,7 @@ namespace ContactPro.Controllers
                 EmailData = emailData
             };
 
-            return View();
+            return View(model);
         }
 
         // GET: Contacts/Details/5
