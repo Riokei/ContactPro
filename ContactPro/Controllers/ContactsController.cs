@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using ContactPro.Enums;
 using ContactPro.Services.Interfaces;
 using ContactPro.Services;
+using ContactPro.Models.ViewModels;
 
 namespace ContactPro.Controllers
 {
@@ -113,8 +114,29 @@ namespace ContactPro.Controllers
         }
 
         [Authorize]
-        public IActionResult EmailContact(int contactId)
+        public async Task <IActionResult> EmailContact(int? id)
         {
+            string appUserId = _userManager.GetUserId(User);
+            Contact contact = await _context.Contacts.Where(c => c.Id == id && c.AppUserId == appUserId)
+                                                    .FirstOrDefaultAsync();
+
+            if(contact == null)
+            {
+                return NotFound();
+            }
+
+            EmailData emailData = new EmailData()
+            {
+                EmailAddress = contact.Email,
+                FirstName = contact.FirstName,
+                LastName = contact.LastName
+            };
+            EmailContactViewModel model = new EmailContactViewModel()
+            {
+                Contact = contact,
+                EmailData = emailData
+            };
+
             return View();
         }
 
