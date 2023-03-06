@@ -92,17 +92,17 @@ namespace ContactPro.Controllers
             AppUser appUser = _context.Users
                 .Include(c => c.Contacts)
                 .ThenInclude(c => c.Categories)
-                .FirstOrDefault(u => u.Id == appUserId);
+                .FirstOrDefault(u => u.Id == appUserId)!;
 
             if(String.IsNullOrEmpty(searchString))
             {
-                contacts = appUser.Contacts
+                contacts = appUser!.Contacts
                     .OrderBy(c => c.LastName)
                     .ThenBy(c => c.FirstName)
                     .ToList();
             }else
             {
-                contacts = appUser.Contacts.Where(c => c.FullName!.ToLower().Contains(searchString.ToLower()))
+                contacts = appUser!.Contacts.Where(c => c.FullName!.ToLower().Contains(searchString.ToLower()))
                     .OrderBy(c => c.LastName)
                     .ThenBy(c => c.FirstName)
                     .ToList();
@@ -127,7 +127,7 @@ namespace ContactPro.Controllers
 
             EmailData emailData = new EmailData()
             {
-                EmailAddress = contact.Email,
+                EmailAddress = contact.Email!,
                 FirstName = contact.FirstName,
                 LastName = contact.LastName
             };
