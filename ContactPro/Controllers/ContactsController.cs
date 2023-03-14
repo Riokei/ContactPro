@@ -13,6 +13,7 @@ using ContactPro.Enums;
 using ContactPro.Services.Interfaces;
 using ContactPro.Services;
 using ContactPro.Models.ViewModels;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace ContactPro.Controllers
 {
@@ -22,19 +23,24 @@ namespace ContactPro.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IImageService _imageService;
         private readonly IAddressBookService _addressBookService;
+        private readonly IEmailSender _emailService;
 
-        public ContactsController(ApplicationDbContext context, UserManager<AppUser> userManager, IImageService imageService, IAddressBookService addressBookService)
+        public ContactsController(ApplicationDbContext context, UserManager<AppUser> userManager, IImageService imageService, IAddressBookService addressBookService, IEmailSender emailService)
         {
             _context = context;
             _userManager = userManager;
             _imageService = imageService;
-            _addressBookService = addressBookService;  
+            _addressBookService = addressBookService;
+            _emailService = emailService;
+            
         }
 
         // GET: Contacts
         [Authorize]
-        public async Task<IActionResult> Index(int catId, string state)
+        public async Task<IActionResult> Index(int catId, string state, string swalMessage = null)
         {
+            ViewData["SwalMessage"] = swalMessage;
+
             var contacts = new List<Contact>();
             string appUserId = _userManager.GetUserId(User);
             //return userID and its associated contacts and associated categories;
@@ -139,6 +145,26 @@ namespace ContactPro.Controllers
 
             return View(model);
         }
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> EmailContact(EmailContactViewModel ecvm)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _emailService.SendEmailAsync(ecvm.EmailData.EmailAddress, ecvm.EmailData.Subject, ecvm.EmailData.Body);
+                    return RedirectToAction("Index", "Contacts", new { swalMessage = "Success: Email Sent!"});
+                }
+                catch
+                {
+                    return RedirectToAction("Index", "Contacts", new { swalMessage = "Error: Email Send Failed!" });
+                    throw;
+                }
+            }
+            return View(ecvm);
+        }
+
 
         // GET: Contacts/Details/5
         [Authorize]
