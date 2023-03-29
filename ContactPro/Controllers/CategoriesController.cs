@@ -10,6 +10,7 @@ using ContactPro.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using ContactPro.Models.ViewModels;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace ContactPro.Controllers
 {
@@ -17,18 +18,22 @@ namespace ContactPro.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IEmailSender _emailSender;
 
-        public CategoriesController(ApplicationDbContext context, UserManager<AppUser> userManager)
+        public CategoriesController(ApplicationDbContext context, UserManager<AppUser> userManager, IEmailSender emailSender)
         {
             _context = context;
             _userManager = userManager;
+            _emailSender = emailSender;
 
         }
 
         // GET: Categories
         [Authorize]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index( string swalMessage = null)
         {
+            ViewData["SwalMessage"] = swalMessage;
+
             string appUserId = _userManager.GetUserId(User);
 
 
@@ -67,6 +72,24 @@ namespace ContactPro.Controllers
             };
 
             return View(model);
+        }
+
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> EmailCategory(EmailCategoryViewModel ecvm)
+        {
+            if (ModelState.IsValid)
+            {
+                try {
+                    await _emailSender.SendEmailAsync(ecvm.EmailData.EmailAddress, ecvm.EmailData.Subject, ecvm.EmailData.Body);
+                    return RedirectToAction("Index", "Categories", new { swalMessage = "Success: Email Sent" });
+                } catch {
+                    return RedirectToAction("Index", "Categories", new { swalMessage = "Error: Email Send Failed!" });
+                    throw;
+                }
+            }
+            return View(ecvm);
         }
 
         // GET: Categories/Details/5
@@ -187,10 +210,12 @@ namespace ContactPro.Controllers
             {
                 return NotFound();
             }
+            string appUserId = _userManager.GetUserId(User);
 
-            var category = await _context.Categories
-                .Include(c => c.AppUser)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var category = await _context.Categories                
+                .FirstOrDefaultAsync(c => c.Id == id && c.AppUserId == appUserId);
+
+
             if (category == null)
             {
                 return NotFound();
@@ -204,17 +229,18 @@ namespace ContactPro.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Categories == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Categories'  is null.");
-            }
-            var category = await _context.Categories.FindAsync(id);
+            string appUserId = _userManager.GetUserId(User);
+            
+            var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id && c.AppUserId == appUserId);
+            
+            
             if (category != null)
             {
                 _context.Categories.Remove(category);
+                await _context.SaveChangesAsync();
             }
             
-            await _context.SaveChangesAsync();
+            
             return RedirectToAction(nameof(Index));
         }
 
