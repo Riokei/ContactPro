@@ -16,9 +16,12 @@ namespace ContactPro.Services
         }
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            var emailSender =_mailsettings.Email;
+            var emailSender =_mailsettings.Email ?? Environment.GetEnvironmentVariable("Email");
+
             MimeMessage newEmail = new();
+
             newEmail.Sender = MailboxAddress.Parse(emailSender);
+
             foreach(var emailAddress in email.Split(","))
             {
                 newEmail.To.Add(MailboxAddress.Parse(emailAddress));
@@ -31,9 +34,9 @@ namespace ContactPro.Services
             //login to smtp
             using SmtpClient smtpClient = new();
             try {
-                var host = _mailsettings.Host;
-                var port = _mailsettings.Port;
-                var password = _mailsettings.Password;
+                var host = _mailsettings.Host ?? Environment.GetEnvironmentVariable("Host");
+                var port = _mailsettings.Port !=0 ? _mailsettings.Port : int.Parse(Environment.GetEnvironmentVariable("Port")!);
+                var password = _mailsettings.Password ?? Environment.GetEnvironmentVariable("Password");
 
                 await smtpClient.ConnectAsync(host, port, SecureSocketOptions.StartTls);
                 await smtpClient.AuthenticateAsync(emailSender, password);
