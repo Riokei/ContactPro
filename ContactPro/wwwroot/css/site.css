@@ -1,14 +1,40 @@
 :root {
     --cf-primaryColor: #0869b8;
     --cf-primaryColorDark: #002a4e;
-    --cf-primaryColorLight: #edf5fc;
+    --cf-primaryColorLight: #fff;
     --cf-secondaryColor: #fff0d9;
     --cf-secondaryColorLight: #FFF8EC;
     --cf-dark-color: #131313;
     --cf-light-gray: #d9d9d9;
     --cf-light-color: #eeeeee;
-    --cf-title-font: 'Fira Sans', sans-serif;
-    --cf-body-font: 'Roboto', sans-serif;
+    --cf-title-font: 'Ultra', sans-serif;
+    --cf-body-font: 'Pt Serif', sans-serif;
+}
+/* ultra-regular - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Ultra';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/ultra-v19-latin-regular.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/ultra-v19-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('../fonts/ultra-v19-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+    url('../fonts/ultra-v19-latin-regular.woff') format('woff'), /* Modern Browsers */
+    url('../fonts/ultra-v19-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('../fonts/ultra-v19-latin-regular.svg#Ultra') format('svg'); /* Legacy iOS */
+}
+/* pt-serif-regular - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'PT Serif';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/pt-serif-v17-latin-regular.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/pt-serif-v17-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('../fonts/pt-serif-v17-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+    url('../fonts/pt-serif-v17-latin-regular.woff') format('woff'), /* Modern Browsers */
+    url('../fonts/pt-serif-v17-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('../fonts/pt-serif-v17-latin-regular.svg#PTSerif') format('svg'); /* Legacy iOS */
 }
 
 html,
