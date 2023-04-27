@@ -1,27 +1,14 @@
 :root {
-    --cf-primaryColor: #0869b8;
-    --cf-primaryColorDark: #002a4e;
+    --cf-primaryColor: #F9A826;
+    --cf-primaryColorDark: #b67b1d;
     --cf-primaryColorLight: #fff;
-    --cf-secondaryColor: #fff0d9;
+    --cf-secondaryColor: #3f3d56;
     --cf-secondaryColorLight: #FFF8EC;
     --cf-dark-color: #131313;
     --cf-light-gray: #d9d9d9;
     --cf-light-color: #eeeeee;
-    --cf-title-font: 'Ultra', sans-serif;
+    --cf-title-font: 'Viga', sans-serif;
     --cf-body-font: 'Pt Serif', sans-serif;
-}
-/* ultra-regular - latin */
-@font-face {
-    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
-    font-family: 'Ultra';
-    font-style: normal;
-    font-weight: 400;
-    src: url('../fonts/ultra-v19-latin-regular.eot'); /* IE9 Compat Modes */
-    src: url('../fonts/ultra-v19-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-    url('../fonts/ultra-v19-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
-    url('../fonts/ultra-v19-latin-regular.woff') format('woff'), /* Modern Browsers */
-    url('../fonts/ultra-v19-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
-    url('../fonts/ultra-v19-latin-regular.svg#Ultra') format('svg'); /* Legacy iOS */
 }
 /* pt-serif-regular - latin */
 @font-face {
@@ -36,6 +23,20 @@
     url('../fonts/pt-serif-v17-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
     url('../fonts/pt-serif-v17-latin-regular.svg#PTSerif') format('svg'); /* Legacy iOS */
 }
+/* viga-regular - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Viga';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/viga-v14-latin-regular.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/viga-v14-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('../fonts/viga-v14-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+    url('../fonts/viga-v14-latin-regular.woff') format('woff'), /* Modern Browsers */
+    url('../fonts/viga-v14-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('../fonts/viga-v14-latin-regular.svg#Viga') format('svg'); /* Legacy iOS */
+}
+
 
 html,
 body {
@@ -65,12 +66,13 @@ body {
     .btn-outline-primary:focus {
         border-color: var(--cf-secondaryColor) !important;
         background-color: var(--cf-primaryColor);
+        color: var(--cf-dark-color);
     }
 
 .btn-primary {
-    color: white !important;
+    color: var(--cf-dark-color);
     background-color: var(--cf-primaryColor) !important;
-    border-color: var(--cf-secondary-color);
+    border-color: var(--cf-primaryColorDark);
 }
 
     .btn-primary:hover {
@@ -89,7 +91,8 @@ body {
 }
 
 nav {
-    background-color: var(--cf-primaryColorLight)
+    background-color: var(--cf-primaryColorLight);
+    font-family: var(--cf-title-font);
 }
 
 h1,
@@ -153,15 +156,16 @@ main {
 
 .sideNav {
     border-radius: 25px;
-    border-color: var(--cf-light-color);
+    border-color: #cfcccc;
     border-style: solid;
-    border-width: 3px;
+    border-width: 2px;
     background-color: var(--cf-secondaryColor);
     padding-top: 2rem;
     padding-bottom: 2rem;
     padding-left: 1rem;
     padding-right: 1rem;
     height: fit-content;
+    color: var(--cf-light-color);
 }
 
 .editIcons {

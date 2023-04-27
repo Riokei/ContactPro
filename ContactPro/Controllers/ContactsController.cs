@@ -93,8 +93,7 @@ namespace ContactPro.Controllers
         public IActionResult SearchContacts(string searchString)
         {
             string appUserId = _userManager.GetUserId(User);
-            var contacts = new List<Contact>();
-            var stateResult = from States s in Enum.GetValues(typeof(States)) select new { Id = s.ToString(), Name = s.ToString() };
+            var contacts = new List<Contact>();            
             AppUser appUser = _context.Users
                 .Include(c => c.Contacts)
                 .ThenInclude(c => c.Categories)
@@ -114,7 +113,7 @@ namespace ContactPro.Controllers
                     .ToList();
             }
 
-            ViewData["States"] = new SelectList(stateResult, "Id", "Name", "");
+            
             ViewData["CategoryId"] = new SelectList(appUser.Categories, "Id", "Name", 0);
             return View(nameof(Index), contacts);
         }
