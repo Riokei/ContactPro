@@ -15,6 +15,9 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using System.Security.Claims;
+using static Org.BouncyCastle.Math.EC.ECCurve;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ContactPro.Areas.Identity.Pages.Account
 {
@@ -22,11 +25,13 @@ namespace ContactPro.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly IConfiguration _configuration;
 
-        public LoginModel(SignInManager<AppUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<AppUser> signInManager, ILogger<LoginModel> logger, IConfiguration configuration)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -92,6 +97,7 @@ namespace ContactPro.Areas.Identity.Pages.Account
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
 
+
             returnUrl ??= Url.Content("~/");
 
             // Clear the existing external cookie to ensure a clean login process
@@ -101,18 +107,32 @@ namespace ContactPro.Areas.Identity.Pages.Account
 
             ReturnUrl = returnUrl;
         }
+        
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+
+        public async Task<IActionResult> OnPostAsync(string demoLogin, string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
-
+            var pass = _configuration.GetRequiredSection("demoPassword")["Password"] ?? Environment.GetEnvironmentVariable("demoPassword");
+            var demo = await _signInManager.PasswordSignInAsync("email@email.com", pass, false, lockoutOnFailure: false);
+            if (demo.Succeeded && !string.IsNullOrEmpty(demoLogin))
+            {
+                _logger.LogInformation("User is logged in");
+                return LocalRedirect(returnUrl);
+            }
+           
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            
 
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+               
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                 
+
+                
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
@@ -127,6 +147,7 @@ namespace ContactPro.Areas.Identity.Pages.Account
                     _logger.LogWarning("User account locked out.");
                     return RedirectToPage("./Lockout");
                 }
+                
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");

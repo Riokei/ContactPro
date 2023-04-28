@@ -3,8 +3,7 @@
 
 @{
     ViewData["Title"] = "Log in";
-    ViewData["Email"] = "gotestcoder@gmail.com";
-    ViewData["Pass"] = "demoAccount-12";
+    
     
 }
 
@@ -12,18 +11,9 @@
 <div class="row d-flex justify-content-center gy-2">
     <div class="col-6">
         <section>
-
-            <form id="account" method="post" class="mb-5">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="display-none">
-                    <input style="display:none" asp-for="Input.Email" value="@ViewData["Email"]" />
-                    <span style="display:none" asp-validation-for="Input.Email" class="text-danger"></span>
-                </div>
-                <div style="display:none">
-                    <input  asp-for="Input.Password" value="@ViewData["Pass"]" />
-                    <span  asp-validation-for="Input.Password" class="text-danger"></span>
-                </div>
-                <button id="login-submit" type="submit" class="btn btn-lg btn-primary">DEMO APPLICATION</button>
+            <h2>Use demo account:</h2>
+            <form id="account" method="post" class="mb-5">               
+                <button id="login-submit" type="submit" class="btn btn-lg btn-primary" value="demoLogin" name="demoLogin" onclick="this.form.submit()">DEMO APPLICATION</button>
             </form>
 
 
