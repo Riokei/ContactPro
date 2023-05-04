@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactPro", "ContactPro\ContactPro.csproj", "{E09E2698-FD68-416A-BE0C-2C04FFCE36BA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactPro", "ContactPro.csproj", "{E09E2698-FD68-416A-BE0C-2C04FFCE36BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
