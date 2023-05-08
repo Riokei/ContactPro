@@ -28,7 +28,7 @@
                 <label class="form-label fw-bold">CATEGORY FILTER</label>
 
                 <select name="catId" asp-items="@ViewBag.CategoryId" class="form-control"
-                        onchange="this.form.submit()" onfocus="this.selectedIndex=-1;this.blur();">
+                        onchange="this.form.submit()" onfocus="this.selectedIndex=-1;">
                     <option>All Contacts</option>
                 </select>
             </div>
@@ -38,7 +38,7 @@
                 <label class="form-label fw-bold">Filter By State</label>
 
                 <select name="state" asp-items="@ViewBag.States" class="form-control"
-                        onchange="this.form.submit()" onfocus="this.selectedIndex=-1;this.blur();">
+                        onchange="this.form.submit()" onfocus="this.selectedIndex=-1;">
                     <option>All Contacts</option>
                 </select>
             </div>
