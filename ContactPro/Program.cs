@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using ContactPro.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
-
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 // Add services to the container.
 //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 //var connectionString = builder.Configuration.GetSection("pgSettings")["pgConnection"];
@@ -27,14 +27,17 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IAddressBookService, AddressBookService>();
 builder.Services.AddScoped<IEmailSender, EmailService>();
-
+builder.Services.AddScoped<IDataGen, DataGenService>();
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 var app = builder.Build();
 var scope = app.Services.CreateScope();
+var datagen = scope.ServiceProvider.GetService<IDataGen>();
+var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 await DataHelper.ManageDataAsync(scope.ServiceProvider);
 
 //Set demo user.
-await DataHelper.SeedAdminAsync(scope.ServiceProvider);
+
+await DataHelper.SeedAdminAsync(scope.ServiceProvider, datagen, context);
 
 
 // Configure the HTTP request pipeline.

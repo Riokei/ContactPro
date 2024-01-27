@@ -37,7 +37,7 @@ namespace ContactPro.Controllers
 
         // GET: Contacts
         [Authorize]
-        public async Task<IActionResult> Index(int catId, string state, string swalMessage = null)
+        public async Task<IActionResult> Index(int catId, string state, string swalMessage = null!)
         {
             ViewData["SwalMessage"] = swalMessage;
 
@@ -122,7 +122,7 @@ namespace ContactPro.Controllers
         public async Task <IActionResult> EmailContact(int? id)
         {
             string appUserId = _userManager.GetUserId(User);
-            Contact contact = await _context.Contacts.Where(c => c.Id == id && c.AppUserId == appUserId)
+            Contact contact = await _context.Contacts.Where(c => c.Id! == id && c.AppUserId! == appUserId!)
                                                     .FirstOrDefaultAsync();
 
             if(contact == null)
@@ -152,7 +152,7 @@ namespace ContactPro.Controllers
             {
                 try
                 {
-                    await _emailService.SendEmailAsync(ecvm.EmailData.EmailAddress, ecvm.EmailData.Subject, ecvm.EmailData.Body);
+                    await _emailService.SendEmailAsync(ecvm.EmailData!.EmailAddress, ecvm.EmailData.Subject, ecvm.EmailData.Body);
                     return RedirectToAction("Index", "Contacts", new { swalMessage = "Success: Email Sent!"});
                 }
                 catch
