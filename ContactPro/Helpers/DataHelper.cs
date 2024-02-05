@@ -3,14 +3,15 @@ using ContactPro.Models;
 using ContactPro.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging;
 namespace ContactPro.Helpers
 {
     
     public static class DataHelper 
 
     {
-        private static ApplicationDbContext context;
-        private static IDataGen dataGen;
+        //private readonly static ApplicationDbContext context;
+        //private readonly static IDataGen dataGen;
         
 
         public static async Task ManageDataAsync(IServiceProvider svcProvider)
@@ -44,6 +45,16 @@ namespace ContactPro.Helpers
                     await userManager.CreateAsync(demoUser, config.GetSection("demoPassword")["Password"] ?? Environment.GetEnvironmentVariable("demoPassword"));
                     List<Contact> contacts = await data.GenerateContacts(demoUser);
                     List<Category> categories = await data.GenerateCategories(demoUser);
+                    Random random = new();
+                    foreach (Contact contact in contacts)
+                    {
+                        int numCat = random.Next(1,5);
+                        var category = categories.OrderBy(categories => Guid.NewGuid()).Take(numCat).ToList();
+
+                        //Fix this.
+                        contact.Categories.AddRange(category);
+                    }
+
                     foreach (Contact contact in contacts) { context.Add(contact); }
                     foreach (Category category in categories) { context.Add(category); }
 
