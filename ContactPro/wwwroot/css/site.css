@@ -53,6 +53,11 @@ body {
     font-weight: 400;
     font-size: 1.2rem;
 }
+/* Card Overrides */
+.text-bg-warning {
+    color: var(--cf-dark-color);
+    background-color: var(--cf-primaryColor) !important;
+}
 
 /*--Button Overrides --*/
 /*-- Button styles override Bootstrap Styles --*/
